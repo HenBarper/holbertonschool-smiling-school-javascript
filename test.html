@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel with Slick</title>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Include Slick CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    <!-- Your custom styles -->
+    <style>
+        .carousel-container {
+            width: 80%;
+            margin: auto;
+        }
+
+        .carousel-item {
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="carousel-container">
+    <div class="carousel">
+        <!-- Carousel items go here -->
+        <div class="carousel-item">1</div>
+        <div class="carousel-item">2</div>
+        <div class="carousel-item">3</div>
+        <div class="carousel-item">4</div>
+        <div class="carousel-item">5</div>
+        <div class="carousel-item">6</div>
+        <div class="carousel-item">7</div>
+        <div class="carousel-item">8</div>
+        <div class="carousel-item">9</div>
+        <!-- Add the remaining items up to 10 -->
+        <!-- ... -->
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('.carousel').slick({
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 2000,
+        });
+    });
+</script>
+
+</body>
+</html>
