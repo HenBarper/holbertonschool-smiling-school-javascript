@@ -1,13 +1,6 @@
 $(document).ready(function(){
     PopulateQuotes();
     PopulateTutorials();
-    $('#tutorial-carousel').slick({
-        autoplay: true,
-        infinite: false,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        speed: 350,
-      });
 });
 
 function PopulateQuotes() {
@@ -49,96 +42,86 @@ function PopulateQuotes() {
 }
 
 function PopulateTutorials() {
-    console.log('1');
     $.ajax({
         url: "https://smileschool-api.hbtn.info/popular-tutorials",
         method: "GET",
         success: function(response){
-            console.log('2');
-            // const quoteCarousel = $('#tutorial-carousel');
+            const quoteCarousel = $('#tutorial-carousel');
+            
 
-            // response.forEach(function makeCarouselItem(tutorial, index) {
-            //     console.log('loop: ' + index);
-            //     const carouselItem = $('<div>').addClass('carousel-item');
-            //     console.log('4');
-            //     // const rowItem = $('<div>').addClass('row align-items-center mx-auto');
-            //     // console.log('5');
-            //     // const colItem = $('<div>').addClass('col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center justify-content-md-end justify-content-lg-center');
-            //     // console.log('6');
-            //     const card = $('<div>').addClass('card');
-            //     console.log('7');
-            //     const thumbnail = $('<img>').addClass('card-img-top').attr('src', tutorial['thumb_url']);
-            //     console.log('8');
-            //     const cardOverlay = $('<div>').addClass('card-img-overlay text-center');
-            //     console.log('9');
-            //     const playButton = $('<img>').addClass('align-self-center play-overlay').attr('src', 'images/play.png').attr('width', '64px');
-            //     console.log('10');
-            //     const cardBody = $('<div>').addClass('card-body');
-            //     console.log('11');
-            //     const cardTitle = $('<h5>').addClass('card-title font-weight-bold').text(tutorial['title']);
-            //     console.log('12');
-            //     const cardPrg = $('<p>').addClass('card-text text-muted').text(tutorial['sub-title']);
-            //     console.log('13');
-            //     const creator = $('<div>').addClass('creator d-flex align-items-center');
-            //     console.log('14');
-            //     const creatorImg = $('<img>').addClass('rounded-circle').attr('src', tutorial['author_pic_url']).attr('width', '30px');
-            //     console.log('15');
-            //     const creatorName = $('<h6>').addClass('pl-3 m-0 main-color').text(tutorial['author']);
-            //     console.log('16');
-            //     const cardFooter = $('<div>').addClass('info pt-3 d-flex justify-content-between');
-            //     console.log('17');
-            //     const ratingDiv = $('<div>').addClass('rating');
-            //     console.log('18');
-            //     for(let i = 1; i < 6; i++){
-            //         console.log('i: ' + i);
-            //         if(i <= tutorial['star']) {
-            //             const fullStar = $('<img>').attr('src', 'images/star_on.png').attr('width', '15px');
-            //             ratingDiv.append(fullStar);
-            //         }
-            //         else {
-            //             const emptyStar = $('<img>').attr('src', 'images/star_off.png').attr('width', '15px');
-            //             ratingDiv.append(emptyStar);
-            //         }
-            //     }
-            //     console.log('19');
-            //     const time = $('<span>').addClass('main-color').text(tutorial['duration']);
-            //     console.log('20');
+            response.forEach(function makeCarouselItem(tutorial, index) {
+                // const carouselItem = $('<div>').addClass('carousel-item');
+                // const rowItem = $('<div>').addClass('row align-items-center mx-auto');
+                // const colItem = $('<div>').addClass('col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center justify-content-md-end justify-content-lg-center');
+                const card = $('<div>').addClass('card p-3');
+                const thumbnail = $('<img>').addClass('card-img-top').attr('src', tutorial['thumb_url']);
+                const cardOverlay = $('<div>').addClass('card-img-overlay text-center');
+                const playButton = $('<img>').addClass('align-self-center play-overlay').attr('src', 'images/play.png').attr('width', '64px');
+                const cardBody = $('<div>').addClass('card-body');
+                const cardTitle = $('<h5>').addClass('card-title font-weight-bold').text(tutorial['title']);
+                const cardPrg = $('<p>').addClass('card-text text-muted').text(tutorial['sub-title']);
+                const creator = $('<div>').addClass('creator d-flex align-items-center');
+                const creatorImg = $('<img>').addClass('rounded-circle').attr('src', tutorial['author_pic_url']).attr('width', '30px');
+                const creatorName = $('<h6>').addClass('pl-3 m-0 main-color').text(tutorial['author']);
+                const cardFooter = $('<div>').addClass('info pt-3 d-flex justify-content-between');
+                const ratingDiv = $('<div>').addClass('rating d-flex');
+                for(let i = 1; i < 6; i++){
+                    if(i <= tutorial['star']) {
+                        const fullStar = $('<img>').attr('src', 'images/star_on.png').attr('width', '15px').attr('height', '15px');
+                        ratingDiv.append(fullStar);
+                    }
+                    else {
+                        const emptyStar = $('<img>').attr('src', 'images/star_off.png').attr('width', '15px').attr('height', '15px');
+                        ratingDiv.append(emptyStar);
+                    }
+                }
+                const time = $('<span>').addClass('main-color').text(tutorial['duration']);
                 
-            //     cardFooter.append(ratingDiv, time); //1
-            //     console.log('21');
-            //     creator.append(creatorImg, creatorName); //2
-            //     console.log('22');
-            //     cardBody.append(cardTitle, cardPrg, creator, cardFooter); //3
-            //     console.log('23');
-            //     cardOverlay.append(playButton); //4
-            //     console.log('24');
-            //     card.append(thumbnail, cardOverlay, cardBody); //5
-            //     console.log('25');
-            //     // colItem.append(card); //6
-            //     // console.log('26');
-            //     // rowItem.append(colItem); //7
-            //     // console.log('27');
-            //     // carouselItem.append(rowItem); //8
-            //     // console.log('28');
-            //     carouselItem.append(card);
-            //     quoteCarousel.append(carouselItem);//9
-            //     console.log('29');
+                cardFooter.append(ratingDiv, time); //1
+                creator.append(creatorImg, creatorName); //2
+                cardBody.append(cardTitle, cardPrg, creator, cardFooter); //3
+                cardOverlay.append(playButton); //4
+                card.append(thumbnail, cardOverlay, cardBody); //5
+                // colItem.append(card); //6
+                // rowItem.append(colItem); //7
+                // carouselItem.append(rowItem); //8
+                quoteCarousel.append(card);//9
                 
-            //     if (index === 0) {
-            //         console.log('adding active class');
-            //         carouselItem.addClass('active');
-            //     }
-            //     console.log('30');
-            // });
-            console.log('31');
+                // if (index === 0) {
+                //     console.log('adding active class');
+                //     carouselItem.addClass('active');
+                // }
+            });
+            $('#tutorial-carousel').slick({
+                // autoplay: true,
+                // infinite: false,
+                slidesToShow: 4,
+                slidesToScroll: 1,
+                // prevArrow: '<button type="button" class="slick-prev"></button>',
+                // nextArrow: '<button type="button" class="slick-next"></button>',
+                // prevArrow: '<button type="button" class="slick-prev"><img src="images/arrow_black_left.png" alt="Previous"></button>',
+                // nextArrow: '<button type="button" class="slick-next"><img src="images/arrow_black_right.png" alt="Next"></button>',
+                // speed: 350,
+                responsive: [
+                    {
+                      breakpoint: 768,
+                      settings: {
+                        slidesToShow: 2
+                      }
+                    },
+                    {
+                      breakpoint: 576,
+                      settings: {
+                        slidesToShow: 1
+                      }
+                    }
+                  ]
+              });
             $('#loading-tutorials').addClass('d-none');
-            console.log('32');
             $('#tutorial-carousel').removeClass('d-none');
-            console.log('33');
         },
         error: function() {
             alert("Error loading tutorials");
         }
     })
-    console.log('34');
 }
