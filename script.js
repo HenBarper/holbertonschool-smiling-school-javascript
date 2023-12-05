@@ -56,7 +56,7 @@ function PopulateTutorials() {
                 const card = $('<div>').addClass('card p-3');
                 const thumbnail = $('<img>').addClass('card-img-top').attr('src', tutorial['thumb_url']);
                 const cardOverlay = $('<div>').addClass('card-img-overlay text-center');
-                const playButton = $('<img>').addClass('align-self-center play-overlay').attr('src', 'images/play.png').attr('width', '64px');
+                const playButton = $('<img>').addClass('mx-auto my-auto play-overlay').attr('src', 'images/play.png').attr('width', '64px');
                 const cardBody = $('<div>').addClass('card-body');
                 const cardTitle = $('<h5>').addClass('card-title font-weight-bold').text(tutorial['title']);
                 const cardPrg = $('<p>').addClass('card-text text-muted').text(tutorial['sub-title']);
@@ -93,15 +93,10 @@ function PopulateTutorials() {
                 // }
             });
             $('#tutorial-carousel').slick({
-                // autoplay: true,
-                // infinite: false,
                 slidesToShow: 4,
                 slidesToScroll: 1,
-                // prevArrow: '<button type="button" class="slick-prev"></button>',
-                // nextArrow: '<button type="button" class="slick-next"></button>',
-                // prevArrow: '<button type="button" class="slick-prev"><img src="images/arrow_black_left.png" alt="Previous"></button>',
-                // nextArrow: '<button type="button" class="slick-next"><img src="images/arrow_black_right.png" alt="Next"></button>',
-                // speed: 350,
+                prevArrow: $('.carousel-control-prev'),
+                nextArrow: $('.carousel-control-next'),
                 responsive: [
                     {
                       breakpoint: 768,
