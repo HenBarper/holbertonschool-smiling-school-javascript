@@ -7,6 +7,9 @@ $(document).ready(function(){
     if (window.location.pathname === '/holbertonschool-smiling-school-javascript/pricing.html') {
         PopulateQuotes();
     }
+    if (window.location.pathname === '/holbertonschool-smiling-school-javascript/courses.html') {
+        PopulateCourses();
+    }
 });
 
 function PopulateQuotes() {
@@ -192,6 +195,61 @@ function PopulateLatest() {
         },
         error: function() {
             alert("Error loading tutorials");
+        }
+    })
+}
+
+function PopulateCourses() {
+    let counter = 0;
+    $.ajax({
+        url: "https://smileschool-api.hbtn.info/courses",
+        method: "GET",
+        success: function(response){
+            // console.log(response);
+            const courseZone = $('#course-zone');
+            
+            response['courses'].forEach(function makeCarouselItem(data, index) {
+                counter += 1;
+                console.log(counter);
+                const courseCol = $('<div>').addClass('col-12 col-sm-4 col-lg-3 d-flex justify-content-center');
+                const card = $('<div>').addClass('card p-3');
+                const thumbnail = $('<img>').addClass('card-img-top').attr('src', data['thumb_url']);
+                const cardOverlay = $('<div>').addClass('card-img-overlay text-center');
+                const playButton = $('<img>').addClass('mx-auto my-auto play-overlay').attr('src', 'images/play.png').attr('width', '64px');
+                const cardBody = $('<div>').addClass('card-body');
+                const cardTitle = $('<h5>').addClass('card-title font-weight-bold').text(data['title']);
+                const cardPrg = $('<p>').addClass('card-text text-muted').text(data['sub-title']);
+                const creator = $('<div>').addClass('creator d-flex align-items-center');
+                const creatorImg = $('<img>').addClass('rounded-circle').attr('src', data['author_pic_url']).attr('width', '30px');
+                const creatorName = $('<h6>').addClass('pl-3 m-0 main-color').text(data['author']);
+                const cardFooter = $('<div>').addClass('info pt-3 d-flex justify-content-between');
+                const ratingDiv = $('<div>').addClass('rating d-flex');
+                for(let i = 1; i < 6; i++){
+                    if(i <= data['star']) {
+                        const fullStar = $('<img>').attr('src', 'images/star_on.png').attr('width', '15px').attr('height', '15px');
+                        ratingDiv.append(fullStar);
+                    }
+                    else {
+                        const emptyStar = $('<img>').attr('src', 'images/star_off.png').attr('width', '15px').attr('height', '15px');
+                        ratingDiv.append(emptyStar);
+                    }
+                }
+                const time = $('<span>').addClass('main-color').text(data['duration']);
+                
+                cardFooter.append(ratingDiv, time);
+                creator.append(creatorImg, creatorName);
+                cardBody.append(cardTitle, cardPrg, creator, cardFooter); 
+                cardOverlay.append(playButton);
+                card.append(thumbnail, cardOverlay, cardBody); 
+                courseCol.append(card);
+                courseZone.append(courseCol);
+            });
+
+            $('#loading-courses').addClass('d-none');
+            $('#course-container').removeClass('d-none');
+        },
+        error: function() {
+            alert("Error loading courses");
         }
     })
 }
