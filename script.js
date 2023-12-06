@@ -96,8 +96,8 @@ function PopulateTutorials() {
             $('#tutorial-carousel').slick({
                 slidesToShow: 4,
                 slidesToScroll: 1,
-                prevArrow: $('.carousel-control-prev'),
-                nextArrow: $('.carousel-control-next'),
+                prevArrow: $('.prev1'),
+                nextArrow: $('.next1'),
                 responsive: [
                     {
                       breakpoint: 768,
@@ -127,7 +127,6 @@ function PopulateLatest() {
         url: "https://smileschool-api.hbtn.info/latest-videos",
         method: "GET",
         success: function(response){
-            // alert('success!')
             const quoteCarousel = $('#latest-carousel');
             
 
