@@ -1,7 +1,12 @@
 $(document).ready(function(){
-    PopulateQuotes();
-    PopulateTutorials();
-    PopulateLatest();
+    if (window.location.pathname === '/holbertonschool-smiling-school-javascript/homepage.html') {
+        PopulateQuotes();
+        PopulateTutorials();
+        PopulateLatest();
+    }
+    if (window.location.pathname === '/holbertonschool-smiling-school-javascript/pricing.html') {
+        PopulateQuotes();
+    }
 });
 
 function PopulateQuotes() {
