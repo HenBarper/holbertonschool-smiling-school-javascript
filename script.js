@@ -15,10 +15,6 @@ $(document).ready(function(){
     }
 
     document.getElementById('select-keywords').addEventListener('input', PopulateCourses);
-    // $('.dropdown-toggle').dropdown();
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     $('.dropdown-toggle').dropdown();
-    // });
 });
 
 function changeTopic(option) {
