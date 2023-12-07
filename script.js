@@ -1,3 +1,4 @@
+// Runs on startup
 $(document).ready(function(){
     let initialLoad = false;
 
