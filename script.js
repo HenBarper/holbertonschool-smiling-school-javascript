@@ -10,14 +10,25 @@ $(document).ready(function(){
         PopulateQuotes();
     }
     if (window.location.pathname === '/holbertonschool-smiling-school-javascript/courses.html') {
+        PopulateCourseCategories();
         PopulateCourses();
     }
 
     document.getElementById('select-keywords').addEventListener('input', PopulateCourses);
-    document.addEventListener('DOMContentLoaded', function() {
-        $('.dropdown-toggle').dropdown();
-    });
+    // $('.dropdown-toggle').dropdown();
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     $('.dropdown-toggle').dropdown();
+    // });
 });
+
+function changeTopic(option) {
+    document.getElementById('select-topic').innerText = option;
+    PopulateCourses();
+}
+function changeSort(option) {
+    document.getElementById('select-sort-by').innerText = option;
+    PopulateCourses();
+}
 
 function PopulateQuotes() {
     $.ajax({
@@ -206,10 +217,41 @@ function PopulateLatest() {
     })
 }
 
+function PopulateCourseCategories() {
+    $.ajax({
+        url: "https://smileschool-api.hbtn.info/courses",
+        method: "GET",
+        success: function(response){
+            const topicChoices = $('#topic-choices');
+            const sortChoices = $('#sort-choices');
+            response['topics'].forEach(function addTopics(data) {
+                let inputString = data;
+                let capitalizedString = inputString.charAt(0).toUpperCase() + inputString.slice(1);
+
+                console.log('data: ' + data);
+                let newTopic = `<a class="dropdown-item" href="#" onclick="changeTopic('${capitalizedString}')">${capitalizedString}</a>`
+                topicChoices.append(newTopic);
+            });
+            response['sorts'].forEach(function addSorts(data) {
+                let inputString = data;
+                let splitString = inputString.split('_');
+
+                let capitalizedWords = splitString.map(splitString => splitString.charAt(0).toUpperCase() + splitString.slice(1));
+                let resultString = capitalizedWords.join(' ');
+
+                let newSort = `<a class="dropdown-item" href="#" onclick="changeSort('${resultString}')">${resultString}</a>`
+                sortChoices.append(newSort);
+            });
+        },
+        error: function() {
+            alert("Error loading course categories.");
+        }
+    })
+}
+
 function PopulateCourses() {
     $('#loading-courses').removeClass('d-none');
     $('#course-container').addClass('d-none');
-    let counter = 0;
     const keySelect = document.getElementById('select-keywords');
     const topicSelect = document.getElementById('select-topic');
     const sortBySelect = document.getElementById('select-sort-by');
@@ -219,15 +261,24 @@ function PopulateCourses() {
         method: "GET",
         success: function(response){
             const courseZone = $('#course-zone');
-            // alert("Keywords " + keySelect.value);
-            // alert("Topic " + topicSelect.textContent);
-            // alert("Sort By " + sortBySelect.textContent);
-            
+
+            const parentElement = document.getElementById("course-zone");
+
+            if (parentElement) {
+                while (parentElement.firstChild) {
+                    parentElement.removeChild(parentElement.firstChild);
+                }
+            }
+            let counter = 0;
+            let courseArray = [];
             response['courses'].forEach(function makeCarouselItem(data, index) {
                 if ((data['topic'] === topicSelect.textContent) || (topicSelect.textContent === "All")) {
-                    if ((data['views'] > 600 && sortBySelect.textContent === "Most Viewed") || (data['star'] >= 4 && sortBySelect.textContent === 'Most Popular') || (data['published_at'] > 1586730000 && sortBySelect.textContent === "Most Recent")) {
+                    const lowerCaseSearchString = keySelect.value.toLowerCase();
+                    const lowerCaseArray = data['keywords'].map(function(item) {
+                        return item.toLowerCase();
+                    })
+                    if (keySelect.value === '' || lowerCaseArray.includes(lowerCaseSearchString)) {
                         counter += 1;
-                        console.log(counter);
                         const courseCol = $('<div>').addClass('col-12 col-sm-4 col-lg-3 d-flex justify-content-center');
                         const card = $('<div>').addClass('card p-3');
                         const thumbnail = $('<img>').addClass('card-img-top').attr('src', data['thumb_url']);
@@ -236,6 +287,10 @@ function PopulateCourses() {
                         const cardBody = $('<div>').addClass('card-body');
                         const cardTitle = $('<h5>').addClass('card-title font-weight-bold').text(data['title']);
                         const cardPrg = $('<p>').addClass('card-text text-muted').text(data['sub-title']);
+                        const views = $('<p>').addClass('card-text text-muted').text('views: ' + data['views']);
+                        const publd = $('<p>').addClass('card-text text-muted').text('Published: ' + (data['published_at'] - 1586700000));
+                        const kw = $('<p>').addClass('card-text text-muted').text('Keywords: ' + data['keywords']);
+                        const topic = $('<p>').addClass('card-text text-muted').text('Topic: ' + data['topic']);
                         const creator = $('<div>').addClass('creator d-flex align-items-center');
                         const creatorImg = $('<img>').addClass('rounded-circle').attr('src', data['author_pic_url']).attr('width', '30px');
                         const creatorName = $('<h6>').addClass('pl-3 m-0 main-color').text(data['author']);
@@ -255,13 +310,27 @@ function PopulateCourses() {
                         
                         cardFooter.append(ratingDiv, time);
                         creator.append(creatorImg, creatorName);
-                        cardBody.append(cardTitle, cardPrg, creator, cardFooter); 
+                        cardBody.append(cardTitle, cardPrg, views, publd, kw, topic, creator, cardFooter); 
                         cardOverlay.append(playButton);
                         card.append(thumbnail, cardOverlay, cardBody); 
                         courseCol.append(card);
-                        courseZone.append(courseCol);
+                        if (sortBySelect.textContent === 'Most Popular') {
+                            courseArray.push([courseCol, data['star']]);
+                            courseArray.sort((a, b) => b[1] - a[1]);
+                        }
+                        else if (sortBySelect.textContent === 'Most Recent') {
+                            courseArray.push([courseCol, data['published_at']]);
+                            courseArray.sort((a, b) => b[1] - a[1]);
+                        }
+                        else if (sortBySelect.textContent === 'Most Viewed') {
+                            courseArray.push([courseCol, data['views']]);
+                            courseArray.sort((a, b) => b[1] - a[1]);
+                        }
                     }
                 }
+            });
+            courseArray.forEach(function addItems(courses, index) {
+                courseZone.append(courses[0]);
             });
             $('.video-count').text(counter + ' videos')
 
